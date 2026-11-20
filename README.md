@@ -11,6 +11,8 @@ old theme is replaced, not kept.
 > Companion app, not part of the launcher. The cleanyourtv launcher stays fully offline (no internet
 > permission); this gallery is the only piece that goes online, and only while it is open.
 
+![The Theme Gallery on an Android TV: category sections of theme cards on the left, and a details panel on the right with a screenshot, the estimated load and the description](docs/screenshot.png)
+
 ## What it does
 
 - **Two tabs:** *Your version* (the themes made for the launcher build you have) and *Latest on GitHub*
