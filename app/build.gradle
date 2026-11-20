@@ -1,0 +1,48 @@
+plugins {
+    id 'com.android.application'
+}
+
+// The cleanyourtv commit the launcher on the TV was built from ("Your version" tab).
+// Update both when the launcher is rebuilt from a newer checkout.
+def installedRef = 'b95380483c9716b0bce6c151fa8de6b1f5000265'
+def installedLabel = 'Launcher 3.4 (11 Nov 2026)'
+
+android {
+    namespace 'uk.home.themegallery'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'uk.home.themegallery'
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+        buildConfigField 'String', 'INSTALLED_REF', "\"${installedRef}\""
+        buildConfigField 'String', 'INSTALLED_LABEL', "\"${installedLabel}\""
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    buildTypes {
+        release {
+            // R8 strips and optimises the code, as in the launcher: a smaller APK. Nothing here uses reflection,
+            // so the default rules are enough.
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            // Sideloaded over ADB, never published.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        disable 'ProtectedPermissions'
+    }
+}
