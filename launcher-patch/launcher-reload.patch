@@ -1,0 +1,47 @@
+diff --git a/launcher/app/src/main/java/com/gathin/tvhome/MainActivity.java b/launcher/app/src/main/java/com/gathin/tvhome/MainActivity.java
+index d92b9d6..e9e5b22 100644
+--- a/launcher/app/src/main/java/com/gathin/tvhome/MainActivity.java
++++ b/launcher/app/src/main/java/com/gathin/tvhome/MainActivity.java
+@@ -472,6 +472,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
+         // off the list (needs WRITE_SECURE_SETTINGS, granted by build-and-install with RESTORE_KEY_SERVICES=1).
+         if (cfg.restoreKeyServices) ServiceRepair.restore(this);
+         settingsRevision = settingsRevision();
++        themeStamp = themeStamp();
+         applyViewInputsHandler(cfg.handleViewInputs);
+         settingsKeycodes = cfg.settingsKeycodes;
+         settingsKeyPanel = cfg.settingsKeyPanel;
+@@ -1115,6 +1116,12 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
+             recreate();
+             return;
+         }
++        // Theme Gallery support: a theme written through ThemeProvider while Home was in the background (no force
++        // stop, which an ordinary app cannot do) is picked up here by rebuilding Home.
++        if (themeStamp != null && !themeStamp.equals(themeStamp())) {
++            recreate();
++            return;
++        }
+         restartIdleClock();
+         promptsPaused = false;
+         if (grid.getAdapter() == null) grid.setAdapter(adapter);   // dropped by onTrimMemory
+@@ -1163,6 +1170,21 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
+         }
+     }
+ 
++    /** Size and time of the theme files Home was built with (Theme Gallery support, see onResume). */
++    private String themeStamp;
++
++    /** The theme files' sizes and change times; a new theme (config.json, wallpaper.jpg or theme_revision) changes it. */
++    private String themeStamp() {
++        File dir = Config.dir(this);
++        if (dir == null) return "";
++        StringBuilder sb = new StringBuilder();
++        for (String name : new String[] {"config.json", "wallpaper.jpg", "theme_revision"}) {
++            File f = new File(dir, name);
++            sb.append(name).append('=').append(f.isFile() ? f.length() + "@" + f.lastModified() : "-").append(';');
++        }
++        return sb.toString();
++    }
++
+     /** Launcher settings' change count (Config.SETTINGS_REVISION_KEY); onResume rebuilds Home when it moved. */
+     private long settingsRevision() {
+         return getSharedPreferences(Config.SETTINGS_NAME, MODE_PRIVATE).getLong(Config.SETTINGS_REVISION_KEY, 0);
