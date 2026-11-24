@@ -25,9 +25,13 @@ final class ThemeApplier {
     static final String LAUNCHER = "com.gathin.tvhome";
     /**
      * Settings the owner added to the theme on the TV that are about their apps, not the look: kept when a new
-     * theme is applied (library_apps puts non-TV apps such as a sideloaded phone app on Home).
+     * theme is applied (library_apps puts non-TV apps such as a sideloaded phone app on Home; app_banners,
+     * app_labels and launch_actions give a tile its picture, its name and where it goes, e.g. a Live TV tile
+     * that opens the aerial tuner directly).
      */
-    static final java.util.Set<String> CARRIED_OVER = java.util.Collections.singleton("library_apps");
+    static final java.util.Set<String> CARRIED_OVER = java.util.Collections.unmodifiableSet(
+            new java.util.LinkedHashSet<>(java.util.Arrays.asList(
+                    "library_apps", "app_banners", "app_labels", "launch_actions")));
     private static final String AUTHORITY = "content://" + LAUNCHER + ".theme/";
 
     interface Progress {

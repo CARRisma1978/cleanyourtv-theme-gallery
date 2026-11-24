@@ -30,7 +30,9 @@ Tested on a Philips 43PUS7906/12, Android TV 11.
   Heavier) worked out from the theme's settings and your screen size. It is an estimate, not a
   measurement.
 - **Applying** downloads everything first, then replaces the theme through the launcher and returns to
-  Home. It also carries over any apps you added to Home via the launcher's `library_apps`.
+  Home. It also carries over the settings you added for your own apps rather than the look: apps you
+  added to Home (`library_apps`) and a tile's picture, name and where it opens (`app_banners`,
+  `app_labels`, `launch_actions`), so a custom tile such as a Live TV shortcut survives a theme change.
 - **Privacy:** it contacts only GitHub (`raw.githubusercontent.com` / the repo tree API), only while
   open. No account, no tracking, no background service.
 
@@ -65,7 +67,7 @@ The launcher only accepts themes from an app holding `WRITE_SECURE_SETTINGS`, wh
 from the TV — it is granted once over ADB and then persists:
 
 ```
-adb install -r cleanyourtv-theme-gallery-1.0.apk
+adb install -r cleanyourtv-theme-gallery-1.1.apk
 adb shell pm grant uk.home.themegallery android.permission.WRITE_SECURE_SETTINGS
 ```
 
